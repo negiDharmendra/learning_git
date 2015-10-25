@@ -1,17 +1,28 @@
-var events = require('events').EventEmitter;
-var eventEmitter = new events();
-var name = process.argv.slice(2);
-name = name.join(' ').toLowerCase()
-var hello = ["dhar","∂har"].join('|')
-var pattern = new RegExp(hello,"gi")
-var callfun = function ringBell()
-{
-	if(name&&name.match(pattern))
-		console.log("kutte bade bhai se ungli nahi karte")
-  	if(name&&!name.match(pattern))console.log(name +" bachha hai tu abhi");
-  	if(!name) console.log("kuch input to de bhai")
+var events = require('events');
+
+function Door(colour) {
+  this.colour = colour;
+  events.EventEmitter.call(this);
+
+  this.open = function()
+  {
+  this.emit('open');
+  }
+  this.close = function()
+  {
+  this.emit('close');
+  }
 }
 
+Door.prototype.__proto__ = events.EventEmitter.prototype;
 
-eventEmitter.on(name, callfun);
-eventEmitter.emit(name);
+var frontDoor = new Door('brown');
+
+frontDoor.on('open', function() {
+    console.log('ring ring ring');
+  });
+frontDoor.on('close', function() {
+    console.log('dhadaaam');
+  });
+frontDoor.open();
+frontDoor.close();
